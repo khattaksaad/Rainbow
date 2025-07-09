@@ -36,7 +36,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:contentDescription="Profile"
-            android:src="@drawable/logo3"
+            android:src="@drawable/kawa_moka_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -69,7 +69,7 @@
     <LinearLayout
         android:id="@+id/bottomNav"
         android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_height="36dp"
         android:background="#FFFFFF"
         android:orientation="horizontal"
         android:gravity="center"

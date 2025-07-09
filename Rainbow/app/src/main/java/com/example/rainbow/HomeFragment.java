@@ -16,7 +16,8 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    public HomeFragment() {}
+    public HomeFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,8 +52,7 @@ public class HomeFragment extends Fragment {
                     view.findViewById(R.id.flashMin2),
                     view.findViewById(R.id.flashSec2));
 
-            // Setup Recommended for you static data cards
-            setupRecommendedCards(view);
+
         }
 
         return view;
@@ -86,71 +86,10 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void fetchProducts() {
-        String url = "https://rainbow-three-khaki.vercel.app/api/products";
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                response -> {
-                    try {
-                        LinearLayout container = getView().findViewById(R.id.dynamicProductContainer);
-                        LayoutInflater inflater = LayoutInflater.from(getContext());
-
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject product = response.getJSONObject(i);
-
-                            View card = inflater.inflate(R.layout.item_product_card, container, false);
-
-                            ImageView image = card.findViewById(R.id.productImage);
-                            TextView name = card.findViewById(R.id.productName);
-                            TextView price = card.findViewById(R.id.productPrice);
-                            ImageView plusBtn = card.findViewById(R.id.plusButton);
-                            ImageView minusBtn = card.findViewById(R.id.minusButton);
-                            TextView counter = card.findViewById(R.id.quantityCounter);
-
-                            String imageUrl = product.getString("image");
-                            String productName = product.getString("name");
-                            String productPrice = product.getString("price");
-
-                            name.setText(productName);
-                            price.setText(productPrice + " PKR");
-
-                            Glide.with(getContext()).load(imageUrl).into(image);
-
-                            // Counter logic
-                            final int[] quantity = {0};
-
-                            plusBtn.setOnClickListener(v -> {
-                                quantity[0]++;
-                                counter.setText(String.valueOf(quantity[0]));
-                                counter.setVisibility(View.VISIBLE);
-                                minusBtn.setVisibility(View.VISIBLE);
-                            });
-
-                            minusBtn.setOnClickListener(v -> {
-                                if (quantity[0] > 0) {
-                                    quantity[0]--;
-                                    counter.setText(String.valueOf(quantity[0]));
-                                    if (quantity[0] == 0) {
-                                        counter.setVisibility(View.GONE);
-                                        minusBtn.setVisibility(View.GONE);
-                                    }
-                                }
-                            });
-
-                            container.addView(card);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }, error -> Log.e("API_ERROR", error.toString()));
-
-        queue.add(jsonArrayRequest);
-    }
-
 
     private void startCountdown(long timeInMillis, TextView daysText, TextView hoursText, TextView minutesText, TextView secondsText) {
-        if (daysText == null || hoursText == null || minutesText == null || secondsText == null) return;
+        if (daysText == null || hoursText == null || minutesText == null || secondsText == null)
+            return;
 
         new CountDownTimer(timeInMillis, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -177,34 +116,4 @@ public class HomeFragment extends Fragment {
         }.start();
     }
 
-    private void setupRecommendedCards(View view) {
-        LinearLayout recommendedContainer = view.findViewById(R.id.recommendedLinearLayout1);
-
-        List<Product> staticProducts = new ArrayList<>();
-        staticProducts.add(new Product(R.drawable.potato, "Potato 1KG", "80 PKR"));
-        staticProducts.add(new Product(R.drawable.onion, "Onion 500G", "50 PKR"));
-        staticProducts.add(new Product(R.drawable.tomato, "Tomato 1KG", "70 PKR"));
-        staticProducts.add(new Product(R.drawable.carrots, "Carrot 1KG", "120 PKR"));
-        staticProducts.add(new Product(R.drawable.lemons, "Lemon 250G", "60 PKR"));
-
-        for (Product product : staticProducts) {
-            View cardView = LayoutInflater.from(getContext()).inflate(R.layout.product_card, recommendedContainer, false);
-
-            ImageView imageView = cardView.findViewById(R.id.productImage);
-            TextView titleView = cardView.findViewById(R.id.productTitle);
-            TextView priceView = cardView.findViewById(R.id.productPrice);
-            ImageView plusBtn = cardView.findViewById(R.id.plusBtn);
-            ImageView minusBtn = cardView.findViewById(R.id.minusBtn);
-            TextView counterText = cardView.findViewById(R.id.counterText);
-
-            imageView.setImageResource(product.imageResId);
-            titleView.setText(product.title);
-            priceView.setText(product.price);
-
-            setupQuantityControls(plusBtn, minusBtn, counterText);
-
-            recommendedContainer.addView(cardView);
-        }
-    }
 }
-

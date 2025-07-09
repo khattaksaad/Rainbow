@@ -1,10 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
-    id("com.android.application")
-    kotlin("android")
-    kotlin("kapt")
-
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
 }
+
 
 android {
     namespace = "com.example.rainbow"
@@ -33,6 +32,13 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+    kotlin {
+        jvmToolchain {
+            languageVersion.set(JavaLanguageVersion.of(11))
+        }
+    }
+
     buildFeatures {
         viewBinding = true
     }
