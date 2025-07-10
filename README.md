@@ -134,14 +134,6 @@ Ensure this is in your `AndroidManifest.xml`:
 * 🔎 Add product filtering and search
 * 🎨 UI/UX enhancements and responsiveness
 
----
-
-## 👨‍💻 Author
-
-**Saad Khattak**
-📧 [GitHub Profile](https://github.com/khattaksaad)
-
----
 
 ## 📄 License
 
