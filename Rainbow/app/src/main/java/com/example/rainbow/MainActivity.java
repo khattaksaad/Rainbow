@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);  // replace with your actual layout file name if different
+        setContentView(R.layout.activity_main);
 
         middleImage = findViewById(R.id.logoButton);
 

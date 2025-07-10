@@ -1,5 +1,20 @@
 package com.example.rainbow;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
+
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.util.Log;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import java.util.ArrayList;
+
+
+
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -15,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
+    LinearLayout recommendedLayout;
 
     public HomeFragment() {
     }
@@ -22,6 +38,9 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        recommendedLayout = view.findViewById(R.id.recommendedLinearLayout1);
+        loadRecommendedProducts();
+
 
         if (!isInEditMode(view)) {
             // Setup Quantity Controls for static cards
@@ -115,5 +134,46 @@ public class HomeFragment extends Fragment {
             }
         }.start();
     }
+    private void loadRecommendedProducts() {
+        String url = "https://rainbow-three-khaki.vercel.app/api/products";
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    Log.d("API_RESPONSE", response.toString());
+                    recommendedLayout.removeAllViews();
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject obj = response.getJSONObject(i);
+                            String name = obj.getString("name");
+                            int price = obj.getInt("price");
+                            String imageUrl = obj.getString("image");
+
+                            View card = LayoutInflater.from(getContext())
+                                    .inflate(R.layout.card_recommended, recommendedLayout, false);
+
+                            TextView nameView = card.findViewById(R.id.productName);
+                            TextView priceView = card.findViewById(R.id.productPrice);
+                            ImageView imageView = card.findViewById(R.id.productImage);
+
+                            nameView.setText(name);
+                            priceView.setText(price + " PKR");
+                            Picasso.get().load(imageUrl).into(imageView);
+
+                            recommendedLayout.addView(card);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    Log.e("API_ERROR", error.toString());
+                    error.printStackTrace();
+                }
+        );
+
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        queue.add(jsonArrayRequest);
+    }
+
 
 }
