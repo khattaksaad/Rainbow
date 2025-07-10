@@ -54,7 +54,7 @@ Rainbow is a modern Android shopping application built using **Java**, **Volley*
 
 ```
 
-[https://rainbow-three-khaki.vercel.app/api/products] (https://rainbow-three-khaki.vercel.app/api/products)
+(https://rainbow-three-khaki.vercel.app/api/products)
 
 ````
 
